@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Valid
 @ConfigurationProperties("jax")
-public class NasusProperties {
+public class JaxProperties {
     @NotNull
-    private String name = "何蜜";
+    private String name = "jax";
 
     public String getName() {
         return name;

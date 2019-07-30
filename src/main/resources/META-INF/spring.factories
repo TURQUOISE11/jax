@@ -1,3 +1,2 @@
 # Auto Configuration
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-cn.lhemi.jax.AutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.lhemi.jax.JaxServerAutoConfiguration
