@@ -1,4 +1,4 @@
-package cn.lhemi.jax;
+package cn.lhemi.jax.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
