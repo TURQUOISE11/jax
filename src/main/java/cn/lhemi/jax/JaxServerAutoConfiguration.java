@@ -64,7 +64,6 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
     }
 
     @Autowired
-//    @Qualifier("jaxChannelInitializer")
     private JaxChannelInitializer jaxChannelInitializer;
 
     @Bean(name = "tcpChannelOptions")
@@ -99,17 +98,11 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
         return new Repository();
     }
 
-
-//    @Bean
-//    public JaxServerBootstrap jaxServerBootstrap() throws InterruptedException {
-//        return new JaxServerBootstrap(serverBootstrap,tcpPort);
-//    }
-
-
     @Override
     public void start() {
         try {
             new JaxServerBootstrap(bootstrap(), tcpPort).start();
+            log.debug("启动成功! 监听端口: {}",tcpPort);
         } catch (Exception e) {
             log.error("启动失败!");
             e.printStackTrace();
