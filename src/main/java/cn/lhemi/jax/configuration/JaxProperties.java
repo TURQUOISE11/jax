@@ -5,6 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @description: Just for fun
+ * @author: TURQUOISE
+ * @create: 2019/7/31 14:06
+ */
 @Valid
 @ConfigurationProperties("jax")
 public class JaxProperties {

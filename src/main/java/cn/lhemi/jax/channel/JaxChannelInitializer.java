@@ -7,7 +7,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
- * @description: 初始化
+ * @description: 默认初始化
  * @author: TURQUOISE
  * @create: 2019-07-30 10:59
  */
@@ -16,7 +16,7 @@ public abstract class JaxChannelInitializer extends ChannelInitializer<SocketCha
     private JaxChannelInboundHandler handler = new JaxChannelInboundHandler();
 
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
         socketChannel.pipeline().addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(handler);
     }
 }

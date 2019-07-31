@@ -12,7 +12,6 @@ import java.util.HashMap;
  * @Description:
  * @Date: Created in 2018/3/27 15:46
  */
-@Data
 public class ChannelRepository {
     /**
      * clientId->Channel

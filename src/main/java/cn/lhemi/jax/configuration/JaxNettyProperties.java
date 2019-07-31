@@ -5,6 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @description: Netty配置
+ * @author: TURQUOISE
+ * @create: 2019/7/31 14:06
+ */
 @Valid
 @ConfigurationProperties("jax.netty")
 public class JaxNettyProperties {

@@ -3,6 +3,8 @@ package cn.lhemi.jax;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
@@ -12,9 +14,9 @@ import java.net.InetSocketAddress;
  * @author: TURQUOISE
  * @create: 2019-07-30 11:05
  */
-@Slf4j
-public class JaxServerBootstrap {
 
+public class JaxServerBootstrap {
+    private static final Logger logger = LoggerFactory.getLogger(JaxServerBootstrap.class);
     private ServerBootstrap serverBootstrap;
     private InetSocketAddress tcpPort;
     private Channel serverChannel;
@@ -36,7 +38,7 @@ public class JaxServerBootstrap {
 
     public void start() throws Exception {
         serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
-        log.info("启动成功! 监听端口: {}", tcpPort);
+        logger.info("启动成功! 监听端口: {}", tcpPort);
     }
 
     public Channel getServerChannel() {

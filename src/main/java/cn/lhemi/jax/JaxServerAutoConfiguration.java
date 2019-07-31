@@ -13,6 +13,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -32,11 +34,12 @@ import java.util.Set;
  * @author: TURQUOISE
  * @create: 2019/7/30 13:57
  */
-@Slf4j
+
 @Configuration
 @ConditionalOnBean(JaxServerMarkerConfiguration.Mark.class)
 @EnableConfigurationProperties({JaxProperties.class, JaxNettyProperties.class})
 public class JaxServerAutoConfiguration implements SmartLifecycle {
+    private static final Logger logger = LoggerFactory.getLogger(JaxServerAutoConfiguration.class);
     @Autowired
     private JaxNettyProperties jaxNettyProperties;
     @Autowired
@@ -102,9 +105,9 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
     public void start() {
         try {
             new JaxServerBootstrap(bootstrap(), tcpPort).start();
-            log.debug("启动成功! 监听端口: {}",tcpPort);
+            logger.debug("启动成功! 监听端口: {}",tcpPort);
         } catch (Exception e) {
-            log.error("启动失败!");
+            logger.error("启动失败!");
             e.printStackTrace();
         }
     }
