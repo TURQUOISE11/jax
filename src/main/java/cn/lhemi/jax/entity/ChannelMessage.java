@@ -2,7 +2,6 @@ package cn.lhemi.jax.entity;
 
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.ScheduledFuture;
-import lombok.Data;
 
 /**
  * @description: channel 调度任务

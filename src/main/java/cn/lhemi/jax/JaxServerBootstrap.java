@@ -2,7 +2,6 @@ package cn.lhemi.jax;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,6 @@ public class JaxServerBootstrap {
     public JaxServerBootstrap(ServerBootstrap serverBootstrap, InetSocketAddress tcpPort) throws InterruptedException {
         this.serverBootstrap = serverBootstrap;
         this.tcpPort = tcpPort;
-        serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
     }
 
     @PreDestroy
@@ -37,8 +35,8 @@ public class JaxServerBootstrap {
     }
 
     public void start() throws Exception {
+        logger.info("启动监听端口: {}", tcpPort);
         serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
-        logger.info("启动成功! 监听端口: {}", tcpPort);
     }
 
     public Channel getServerChannel() {

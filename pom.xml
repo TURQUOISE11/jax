@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.lhemi</groupId>
     <artifactId>jax</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>jax</name>
     <description>Is a tools for IOT</description>
 
@@ -57,10 +57,11 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- slf4j-logback绑定 -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

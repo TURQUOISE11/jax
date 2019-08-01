@@ -1,7 +1,6 @@
 package cn.lhemi.jax.repository;
 
 import io.netty.channel.Channel;
-import lombok.Data;
 
 import java.util.HashMap;
 

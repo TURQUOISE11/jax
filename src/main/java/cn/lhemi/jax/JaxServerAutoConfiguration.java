@@ -12,7 +12,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +104,6 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
     public void start() {
         try {
             new JaxServerBootstrap(bootstrap(), tcpPort).start();
-            logger.debug("启动成功! 监听端口: {}",tcpPort);
         } catch (Exception e) {
             logger.error("启动失败!");
             e.printStackTrace();

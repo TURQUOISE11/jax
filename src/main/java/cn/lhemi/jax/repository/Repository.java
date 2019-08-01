@@ -1,7 +1,6 @@
 package cn.lhemi.jax.repository;
 
 import cn.lhemi.jax.entity.ChannelMessage;
-import lombok.Data;
 
 import java.util.HashMap;
 
@@ -12,7 +11,6 @@ import java.util.HashMap;
  * @author: TURQUOISE
  * @create: 2018-06-01 16:16
  */
-@Data
 public class Repository {
     private HashMap<String, ChannelMessage> channelCache = new HashMap<>();
 
