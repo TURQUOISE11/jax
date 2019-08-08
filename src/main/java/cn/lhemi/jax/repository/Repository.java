@@ -43,4 +43,12 @@ public class Repository {
     public int size() {
         return this.channelCache.size();
     }
+
+    public HashMap<String, ChannelMessage> getChannelCache() {
+        return channelCache;
+    }
+
+    public void setChannelCache(HashMap<String, ChannelMessage> channelCache) {
+        this.channelCache = channelCache;
+    }
 }

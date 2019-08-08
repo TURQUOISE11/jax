@@ -4,7 +4,8 @@ package cn.lhemi.jax;
 import cn.lhemi.jax.channel.JaxChannelInitializer;
 import cn.lhemi.jax.configuration.JaxNettyProperties;
 import cn.lhemi.jax.configuration.JaxProperties;
-import cn.lhemi.jax.repository.ChannelRepository;
+import cn.lhemi.jax.repository.CtxRepository;
+import cn.lhemi.jax.repository.DeviceRepository;
 import cn.lhemi.jax.repository.Repository;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -90,15 +91,13 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
         return new InetSocketAddress(jaxNettyProperties.getPort());
     }
 
-    @Bean(name = "channelRepository")
-    public ChannelRepository channelRepository() {
-        return new ChannelRepository();
+    @Bean
+    public void initRepository() {
+        JaxSpringContextUtil.setCtxRepository(new CtxRepository());
+        JaxSpringContextUtil.setDeviceRepository(new DeviceRepository());
+        JaxSpringContextUtil.setRepository(new Repository());
     }
 
-    @Bean(name = "repository")
-    public Repository repository() {
-        return new Repository();
-    }
 
     @Override
     public void start() {
