@@ -35,7 +35,7 @@ public class JaxServerBootstrap {
     }
 
     public void start() throws Exception {
-        logger.info("启动监听端口: {}", tcpPort);
+        logger.info("TCP server listen on port : {}", tcpPort.getPort());
         serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
     }
 

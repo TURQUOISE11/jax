@@ -1,6 +1,7 @@
 package cn.lhemi.jax.annotation;
 
 import cn.lhemi.jax.JaxServerMarkerConfiguration;
+import cn.lhemi.jax.JaxSpringContextUtil;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -13,6 +14,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(JaxServerMarkerConfiguration.class)
+@Import({JaxServerMarkerConfiguration.class, JaxSpringContextUtil.class})
 public @interface EnableJaxServer {
 }

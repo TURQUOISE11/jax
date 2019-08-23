@@ -1,6 +1,7 @@
 package cn.lhemi.jax;
 
 import cn.lhemi.jax.repository.CtxRepository;
+import cn.lhemi.jax.repository.DeviceIdRepository;
 import cn.lhemi.jax.repository.DeviceRepository;
 import cn.lhemi.jax.util.RemoteAddressUtil;
 import io.netty.channel.ChannelFuture;
@@ -38,6 +39,20 @@ public class Jax {
     }
 
     /**
+     * 获取deviceId
+     *
+     * @return int
+     */
+    public static String deviceId(ChannelHandlerContext ctx) {
+        DeviceIdRepository deviceIdRepository = JaxSpringContextUtil.getDeviceIdRepository();
+        String remoteAddress = RemoteAddressUtil.address(ctx);
+        if (deviceIdRepository.containsKey(remoteAddress)) {
+            return deviceIdRepository.getDeviceIdCache(remoteAddress);
+        }
+        return null;
+    }
+
+    /**
      * device连接数
      *
      * @return int
@@ -65,6 +80,20 @@ public class Jax {
      */
     public static void send2AllDevice(Object message) {
         allDeviceCtx().forEach(ctx -> send(ctx, message));
+    }
+
+    /**
+     * 批量发送给所有device
+     *
+     * @param message message
+     * @return ChannelFuture
+     */
+    public static void send2Device(String deviceId,Object message) {
+        ChannelHandlerContext ctx=getCtxByDeviceId(deviceId);
+        if (null==ctx){
+            return;
+        }
+        send(ctx,message);
     }
 
 
@@ -179,13 +208,26 @@ public class Jax {
      * @return boolean
      */
     public static boolean unbindCtx(ChannelHandlerContext ctx) {
+        boolean result = false;
         CtxRepository ctxRepository = JaxSpringContextUtil.getCtxRepository();
+        DeviceRepository deviceRepository = JaxSpringContextUtil.getDeviceRepository();
+        DeviceIdRepository deviceIdRepository = JaxSpringContextUtil.getDeviceIdRepository();
         String remoteAddress = RemoteAddressUtil.address(ctx);
+        String deviceId = null;
         if (ctxRepository.containsKey(remoteAddress)) {
             ctxRepository.removeCtxCache(remoteAddress);
-            return false;
+            result = true;
         }
-        return true;
+        if (deviceIdRepository.containsKey(remoteAddress)) {
+            deviceId = deviceIdRepository.getDeviceIdCache(remoteAddress);
+            deviceIdRepository.removeDeviceIdCache(remoteAddress);
+            result = true;
+        }
+        if (null != deviceId && deviceRepository.containsKey(deviceId)) {
+            deviceRepository.removeDeviceCache(deviceId);
+            result = true;
+        }
+        return result;
     }
 
 
@@ -198,9 +240,12 @@ public class Jax {
      */
     public static boolean bindDevice(ChannelHandlerContext ctx, String deviceId) {
         DeviceRepository deviceRepository = JaxSpringContextUtil.getDeviceRepository();
+        DeviceIdRepository deviceIdRepository = JaxSpringContextUtil.getDeviceIdRepository();
+
         if (deviceRepository.containsKey(deviceId)) {
             return false;
         }
+        deviceIdRepository.putDeviceIdCache(RemoteAddressUtil.address(ctx), deviceId);
         deviceRepository.putDeviceCache(deviceId, ctx);
         return true;
     }
@@ -214,9 +259,8 @@ public class Jax {
      */
     public static boolean bindOrUpdateDevice(ChannelHandlerContext ctx, String deviceId) {
         DeviceRepository deviceRepository = JaxSpringContextUtil.getDeviceRepository();
-        if (deviceRepository.containsKey(deviceId)) {
-            return false;
-        }
+        DeviceIdRepository deviceIdRepository = JaxSpringContextUtil.getDeviceIdRepository();
+        deviceIdRepository.putDeviceIdCache(RemoteAddressUtil.address(ctx), deviceId);
         deviceRepository.putDeviceCache(deviceId, ctx);
         return true;
     }
@@ -227,7 +271,7 @@ public class Jax {
      * @param deviceId deviceId
      * @return boolean
      */
-    public static boolean isBindOrUpdateDevice(String deviceId) {
+    public static boolean isBindDevice(String deviceId) {
         DeviceRepository deviceRepository = JaxSpringContextUtil.getDeviceRepository();
         return deviceRepository.containsKey(deviceId);
     }
@@ -238,12 +282,24 @@ public class Jax {
      * @param deviceId deviceId
      * @return boolean
      */
-    public static boolean unbindOrUpdateDevice(String deviceId) {
+    public static boolean unbindDevice(String deviceId) {
+        boolean result = false;
         DeviceRepository deviceRepository = JaxSpringContextUtil.getDeviceRepository();
+        DeviceIdRepository deviceIdRepository = JaxSpringContextUtil.getDeviceIdRepository();
+        String remoteAddress = null;
         if (deviceRepository.containsKey(deviceId)) {
+            ChannelHandlerContext ctx = deviceRepository.getDeviceCache(deviceId);
+            if (null == ctx) {
+                result = true;
+            } else {
+                remoteAddress = RemoteAddressUtil.address(ctx);
+            }
             deviceRepository.removeDeviceCache(deviceId);
-            return true;
         }
-        return false;
+        if (null != remoteAddress && deviceIdRepository.containsKey(remoteAddress)) {
+            deviceIdRepository.removeDeviceIdCache(remoteAddress);
+            result = true;
+        }
+        return result;
     }
 }

@@ -1,6 +1,7 @@
 package cn.lhemi.jax;
 
 import cn.lhemi.jax.repository.CtxRepository;
+import cn.lhemi.jax.repository.DeviceIdRepository;
 import cn.lhemi.jax.repository.DeviceRepository;
 import cn.lhemi.jax.repository.Repository;
 import org.springframework.beans.BeansException;
@@ -19,6 +20,7 @@ public class JaxSpringContextUtil implements ApplicationContextAware {
     private static DeviceRepository deviceRepository;
     private static Repository repository;
     private static CtxRepository ctxRepository;
+    private static DeviceIdRepository deviceIdRepository;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -56,6 +58,13 @@ public class JaxSpringContextUtil implements ApplicationContextAware {
 
     public static void setCtxRepository(CtxRepository ctxRepository) {
         JaxSpringContextUtil.ctxRepository = ctxRepository;
+    }
+    public static DeviceIdRepository getDeviceIdRepository() {
+        return deviceIdRepository;
+    }
+
+    public static void setDeviceIdRepository(DeviceIdRepository deviceIdRepository) {
+        JaxSpringContextUtil.deviceIdRepository = deviceIdRepository;
     }
 
 

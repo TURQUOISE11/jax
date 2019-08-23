@@ -1,10 +1,12 @@
 package cn.lhemi.jax;
 
 
+import cn.lhemi.jax.annotation.EnableJaxServer;
 import cn.lhemi.jax.channel.JaxChannelInitializer;
 import cn.lhemi.jax.configuration.JaxNettyProperties;
 import cn.lhemi.jax.configuration.JaxProperties;
 import cn.lhemi.jax.repository.CtxRepository;
+import cn.lhemi.jax.repository.DeviceIdRepository;
 import cn.lhemi.jax.repository.DeviceRepository;
 import cn.lhemi.jax.repository.Repository;
 import io.netty.bootstrap.ServerBootstrap;
@@ -22,6 +24,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -39,9 +43,12 @@ import java.util.Set;
 @ConditionalOnBean(JaxServerMarkerConfiguration.Mark.class)
 @EnableConfigurationProperties({JaxProperties.class, JaxNettyProperties.class})
 public class JaxServerAutoConfiguration implements SmartLifecycle {
+
     private static final Logger logger = LoggerFactory.getLogger(JaxServerAutoConfiguration.class);
+
     @Autowired
     private JaxNettyProperties jaxNettyProperties;
+
     @Autowired
     @Qualifier("tcpSocketAddress")
     private InetSocketAddress tcpPort;
@@ -96,13 +103,19 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
         JaxSpringContextUtil.setCtxRepository(new CtxRepository());
         JaxSpringContextUtil.setDeviceRepository(new DeviceRepository());
         JaxSpringContextUtil.setRepository(new Repository());
+        JaxSpringContextUtil.setDeviceIdRepository(new DeviceIdRepository());
+    }
+
+    @Bean
+    public JaxServerBootstrap jaxServerBootstrap() throws InterruptedException {
+        return new JaxServerBootstrap(bootstrap(), tcpPort);
     }
 
 
     @Override
     public void start() {
         try {
-            new JaxServerBootstrap(bootstrap(), tcpPort).start();
+//            new JaxServerBootstrap(bootstrap(), tcpPort).start();
         } catch (Exception e) {
             logger.error("启动失败!");
             e.printStackTrace();
