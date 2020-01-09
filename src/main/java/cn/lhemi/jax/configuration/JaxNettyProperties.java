@@ -13,12 +13,25 @@ import javax.validation.constraints.NotNull;
 @Valid
 @ConfigurationProperties("jax.netty")
 public class JaxNettyProperties {
+
+    /**
+     * 监听端口
+     */
     @NotNull
     private int port = 9007;
+    /**
+     * Boss线程数量
+     */
     @NotNull
     private int bossCount = 100;
+    /**
+     * Worker线程数量
+     */
     @NotNull
     private int workerCount = 200;
+    /**
+     * 日志
+     */
     @NotNull
     private int backlog = 100;
 

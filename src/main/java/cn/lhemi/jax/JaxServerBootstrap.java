@@ -2,6 +2,7 @@ package cn.lhemi.jax;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 
 /**
- * @description:
+ * @description: JaxServer 启动
  * @author: TURQUOISE
  * @create: 2019-07-30 11:05
  */
@@ -18,7 +19,7 @@ public class JaxServerBootstrap {
     private static final Logger logger = LoggerFactory.getLogger(JaxServerBootstrap.class);
     private ServerBootstrap serverBootstrap;
     private InetSocketAddress tcpPort;
-    private Channel serverChannel;
+    private ChannelFuture channelFuture;
 
     public JaxServerBootstrap() {
     }
@@ -30,20 +31,16 @@ public class JaxServerBootstrap {
 
     @PreDestroy
     public void stop() throws Exception {
-        serverChannel.close();
-        serverChannel.parent().close();
+        channelFuture.channel().close();
+        channelFuture.channel().parent().close();
     }
 
     public void start() throws Exception {
+        channelFuture = serverBootstrap.bind(tcpPort).sync();
         logger.info("TCP server listen on port : {}", tcpPort.getPort());
-        serverChannel = serverBootstrap.bind(tcpPort).sync().channel().closeFuture().sync().channel();
     }
 
-    public Channel getServerChannel() {
-        return serverChannel;
-    }
-
-    public void setServerChannel(Channel serverChannel) {
-        this.serverChannel = serverChannel;
+    public boolean isActive() {
+        return channelFuture != null && channelFuture.channel().isActive();
     }
 }

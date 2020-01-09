@@ -13,6 +13,11 @@ import javax.validation.constraints.NotNull;
 @Valid
 @ConfigurationProperties("jax")
 public class JaxProperties {
+
+
+    /**
+     * 名称
+     */
     @NotNull
     private String name = "jax";
 

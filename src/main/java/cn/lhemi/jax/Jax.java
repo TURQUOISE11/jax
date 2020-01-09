@@ -88,12 +88,12 @@ public class Jax {
      * @param message message
      * @return ChannelFuture
      */
-    public static void send2Device(String deviceId,Object message) {
-        ChannelHandlerContext ctx=getCtxByDeviceId(deviceId);
-        if (null==ctx){
+    public static void send2Device(String deviceId, Object message) {
+        ChannelHandlerContext ctx = getCtxByDeviceId(deviceId);
+        if (null == ctx) {
             return;
         }
-        send(ctx,message);
+        send(ctx, message);
     }
 
 

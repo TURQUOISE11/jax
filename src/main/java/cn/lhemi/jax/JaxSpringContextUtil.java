@@ -59,6 +59,7 @@ public class JaxSpringContextUtil implements ApplicationContextAware {
     public static void setCtxRepository(CtxRepository ctxRepository) {
         JaxSpringContextUtil.ctxRepository = ctxRepository;
     }
+
     public static DeviceIdRepository getDeviceIdRepository() {
         return deviceIdRepository;
     }

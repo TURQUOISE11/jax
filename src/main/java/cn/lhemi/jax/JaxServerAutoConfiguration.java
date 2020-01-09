@@ -1,8 +1,7 @@
 package cn.lhemi.jax;
 
 
-import cn.lhemi.jax.annotation.EnableJaxServer;
-import cn.lhemi.jax.channel.JaxChannelInitializer;
+import cn.lhemi.jax.channel.AbstractJaxChannelInitializer;
 import cn.lhemi.jax.configuration.JaxNettyProperties;
 import cn.lhemi.jax.configuration.JaxProperties;
 import cn.lhemi.jax.repository.CtxRepository;
@@ -24,8 +23,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.Order;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -34,7 +31,7 @@ import java.util.Set;
 
 
 /**
- * @description:
+ * @description: Jax自动配置
  * @author: TURQUOISE
  * @create: 2019/7/30 13:57
  */
@@ -46,6 +43,7 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
 
     private static final Logger logger = LoggerFactory.getLogger(JaxServerAutoConfiguration.class);
 
+    private static boolean isSuccess = true;
     @Autowired
     private JaxNettyProperties jaxNettyProperties;
 
@@ -63,7 +61,7 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
         b.group(bossGroup(), workerGroup())
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.DEBUG))
-                .childHandler(jaxChannelInitializer)
+                .childHandler(abstractJaxChannelInitializer)
                 .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
         Map<ChannelOption<?>, Object> tcpChannelOptions = tcpChannelOptions();
         Set<ChannelOption<?>> keySet = tcpChannelOptions.keySet();
@@ -74,7 +72,9 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
     }
 
     @Autowired
-    private JaxChannelInitializer jaxChannelInitializer;
+    private AbstractJaxChannelInitializer abstractJaxChannelInitializer;
+    @Autowired
+    private JaxServerBootstrap jaxServerBootstrap;
 
     @Bean(name = "tcpChannelOptions")
     public Map<ChannelOption<?>, Object> tcpChannelOptions() {
@@ -115,8 +115,9 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
     @Override
     public void start() {
         try {
-//            new JaxServerBootstrap(bootstrap(), tcpPort).start();
+            jaxServerBootstrap.start();
         } catch (Exception e) {
+            isSuccess = false;
             logger.error("启动失败!");
             e.printStackTrace();
         }
@@ -129,6 +130,7 @@ public class JaxServerAutoConfiguration implements SmartLifecycle {
 
     @Override
     public boolean isRunning() {
-        return false;
+
+        return isSuccess && jaxServerBootstrap.isActive();
     }
 }
