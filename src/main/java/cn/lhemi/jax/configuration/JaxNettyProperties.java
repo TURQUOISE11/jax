@@ -30,7 +30,7 @@ public class JaxNettyProperties {
     @NotNull
     private int workerCount = 200;
     /**
-     * 日志
+     * 初始化连接大小
      */
     @NotNull
     private int backlog = 100;

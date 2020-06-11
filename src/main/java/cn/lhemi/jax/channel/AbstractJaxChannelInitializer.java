@@ -13,7 +13,7 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 @ChannelHandler.Sharable
 public abstract class AbstractJaxChannelInitializer extends ChannelInitializer<SocketChannel> {
-    private JaxChannelInboundHandler handler = new JaxChannelInboundHandler();
+    private final JaxChannelInboundHandler handler = new JaxChannelInboundHandler();
 
     @Override
     protected void initChannel(SocketChannel socketChannel) {
